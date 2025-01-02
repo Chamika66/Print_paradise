@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Print Paradise</title>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" />
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <section id="header">
+        <a href="#"><img src="Images/Print Paradise.png" class="logo" alt="Print Paradise logo"></a>
+
+        <div>
+            <ul id="navbar">
+                <li><a class="active" href="index.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact Us</a></li>
+                <li><a href="cart.html"><i class="fas fa-shopping-bag"></i></i>
+                </a></li>
+            </ul>
+        </div>
+    </section>
+
+    <section id="hero">
+        <h1>Welcome to Print Paradise</h1>
+        <h4>Your destination for high quality printing services</h4>
+        <p>Design, Print, Impress: Your Journey Starts Here..</p>
+        <button>Explore services</button>
+    </section>
+
+    <section id="services" class="section-p1">
+        <h2>Our Services</h2>
+        <div class="services-container">
+            <div class="service-item">
+                <img src="images/mug-printing.jpg" alt="Digital Printing">
+                <h4>Digital Printing</h4>
+                <p>High-quality digital printing services for professional projects.</p>
+            </div>
+            <div class="service-item">
+                <img src="images/tshirt-printing.jpg" alt="Offset Printing">
+                <h4>Offset Printing</h4>
+                <p>High-quality offset printing with customizable options for bulk orders.</p>
+            </div>
+            <div class="service-item">
+                <img src="images/laser-printing.jpg" alt="Laser Printing">
+                <h4>Graphic Designing</h4>
+                <p>Customizable graphic designing services for professional projects.</p>
+            </div>
+            <div class="service-item">
+                <img src="images/laser-cutting.jpg" alt="Laser Cutting">
+                <h4>Laser Cutting</h4>
+                <p>Precision laser cutting services for a variety of materials and intricate designs.</p>
+            </div>
+            <div class="service-item">
+                <img src="images/3d-printing.jpg" alt="Gift Items">
+                <h4>Gift Items</h4>
+                <p>High-quality 3D printing services for customized projects.</p>
+            </div>
+            <div class="service-item">
+                <img src="images/folded-paper.jpg" alt="Folded Paper">
+                <h4>Photo Framming</h4>
+                <p>Customizable photo framing services for professional projects.</p>
+        </div>
+    </section>
+
+    <section id="about" class="section-p1 about-us">
+        <div class="about-content">
+            <div class="about-text">
+                <h2>About Us</h2>
+                <p>At Print Paradise, we are passionate about providing high-quality custom printing services. With years of experience in the printing industry, we specialize in personalized mugs, T-shirts, laser printing, and laser cutting. Our mission is to turn your ideas into reality, whether for promotional materials or unique, personal gifts.</p>
+                <p>We believe in exceptional craftsmanship, attention to detail, and customer satisfaction. Our team works closely with every client to ensure that each project meets the highest standards. Let us help you make your mark with professional, creative, and reliable printing services.</p>
+            </div>
+            <div class="about-image">
+                <img src="images/about-us.jpg" alt="About Us">
+            </div>
+        </div>
+    </section>
+
+    <section id="customer-comments">
+        <h2>Leave a Comment</h2>
+        <form id="commentForm">
+            <label for="name">Your Name:</label>
+            <input type="text" id="name" name="name" required>
+        
+            <label for="comment">Your Comment:</label>
+            <textarea id="comment" name="comment" required></textarea>
+        
+            <button type="button" onclick="submitComment()">Submit Comment</button>
+        </form>
+    </section>
+    
+    <script>
+        function submitComment() {
+            // Get form values
+            const name = document.getElementById('name').value;
+            const comment = document.getElementById('comment').value;
+    
+            // Use fetch to send data to the server
+            fetch('http://localhost:3000/submit', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ name: name, comment: comment })  // Send form data as JSON
+            })
+            .then(response => response.text())
+            .then(data => {
+                alert(data);  // Show success message or data returned by the server
+            })
+            .catch(error => {
+                console.error('Error:', error);  // Show error in console
+            });
+        }
+    </script>
+    
+    
+    <section id="display-comments">
+        <h2>Customer Comments</h2>
+        <div id="comments-list">
+            <!-- Comments will be displayed here -->
+        </div>
+    </section>
+    
+    <script>
+        // Function to fetch and display comments
+        function fetchComments() {
+            fetch('http://localhost:3000/comments')
+                .then(response => response.json())  // Parse response as JSON
+                .then(comments => {
+                    const commentsList = document.getElementById('comments-list');
+                    commentsList.innerHTML = '';  // Clear existing comments
+    
+                    // Sort comments to show the most recent one at the top (by date)
+                    comments.sort((a, b) => new Date(b.date) - new Date(a.date));
+    
+                    // Iterate over the sorted comments and display each one
+                    comments.forEach(comment => {
+                        const commentDiv = document.createElement('div');
+                        commentDiv.classList.add('comment-item');  // Optional: add a class for styling
+                        commentDiv.innerHTML = `
+                            <p><strong>${comment.name}</strong> said:</p>
+                            <p>${comment.comment}</p>
+                            <p><small>Posted on: ${new Date(comment.date).toLocaleString()}</small></p>
+                            <hr>
+                        `;
+                        commentsList.appendChild(commentDiv);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching comments:', error);
+                });
+        }
+    
+        // Fetch comments when the page loads
+        document.addEventListener('DOMContentLoaded', fetchComments);
+    </script>
+    
+    
+
+    <section id="contact" class="section-p1">
+        <h2>Contact Us</h2>
+        <div class="contact-container">
+            <div class="contact-info">
+                <h3>Print Paradise</h3>
+                <p><strong>Address:</strong> 123 Print Avenue, Colombo, Sri Lanka</p>
+                <p><strong>Phone:</strong> +94 112 345 678</p>
+                <p><strong>Email:</strong> info@printparadise.lk</p>
+            </div>
+            <div class="contact-map">
+                <h4>Our Location</h4>
+                <iframe 
+                    src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d502567.4944452298!2d79.89726523271592!3d6.894433256722327!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ae259b3ebf509dd%3A0x6f3303d92b4d170b!2sPrint%20Paradise!5e0!3m2!1sen!2slk!4v1727161762728!5m2!1sen!2slk" 
+                    width="600" 
+                    height="450" 
+                    style="border:0;" 
+                    allowfullscreen="" 
+                    loading="lazy" 
+                    referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
+        </div>
+    </section>  
+
+    <script src="script.js"></script>
+</body>
+</html>
